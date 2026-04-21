@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>图书商城 - 实验2</title>
+    <!-- 引入外部CSS -->
+    <link rel="stylesheet" href="lab2-2504-122-index.css">
+</head>
+<body>
+<!-- 头部：logo + 固定导航栏 -->
+<header class="header">
+    <div class="logo">
+        <h1>鲁大图书馆</h1>
+    </div>
+    <!-- 固定定位顶部菜单 -->
+    <nav class="top-menu">
+        <a href="#">首页</a>
+        <a href="#">图书分类</a>
+        <a href="#">热门推荐</a>
+        <a href="#">关于我们</a>
+        <a href="#">联系客服</a>
+    </nav>
+</header>
+
+<!-- 主体内容区 -->
+<div class="container">
+    <!-- 左侧导航：相对定位 -->
+    <aside class="left-nav">
+        <h3>图书分类</h3>
+        <ul>
+            <li>计算机图书</li>
+            <li>文学小说</li>
+            <li>历史传记</li>
+            <li>少儿读物</li>
+            <li>考试教材</li>
+        </ul>
+    </aside>
+
+    <!-- 中间内容区 -->
+    <main class="main-content">
+        <!-- 图书展示：父相子绝 + 鼠标悬停 -->
+         <h3>图书展示</h3>
+        <section class="book-show">
+            <div class="book-item">
+                <img src="img6.jpg" alt="图书封面">
+                <!-- 绝对定位悬浮文字 -->
+                <div class="book-desc">点击查看详情</div>
+            </div>
+            <div class="book-item">
+                <img src="img6.jpg" alt="图书封面">
+                <!-- 绝对定位悬浮文字 -->
+                <div class="book-desc">点击查看详情</div>
+            </div>
+            <div class="book-item">
+                <img src="img6.jpg" alt="图书封面">
+                <!-- 绝对定位悬浮文字 -->
+                <div class="book-desc">点击查看详情</div>
+            </div>
+        </section>
+
+        <!-- 热门推荐：浮动排列 -->
+        <section class="hot-book">
+            <h3>热门推荐</h3>
+            <div class="hot-item">Python入门</div>
+            <div class="hot-item">JavaScript实战</div>
+            <div class="hot-item">HTML/CSS权威指南</div>
+        </section>
+
+        <!-- 新书上市：表格布局 -->
+        <section class="new-book">
+            <h3>新书上市</h3>
+            <table border="1" cellpadding="8" cellspacing="0">
+                <tr>
+                    <th>书名</th>
+                    <th>价格</th>
+                    <th>出版时间</th>
+                </tr>
+                <tr>
+                    <td>深入Java</td>
+                    <td>59元</td>
+                    <td>2025-01</td>
+                </tr>
+                <tr>
+                    <td>前端开发</td>
+                    <td>49元</td>
+                    <td>2025-02</td>
+                </tr>
+            </table>
+        </section>
+    </main>
+
+    <!-- 右侧广告：固定定位 -->
+    <aside class="right-ad">
+        <h3>促销信息</h3>
+        <img src="img/ad.jpg" alt="促销广告">
+        <p>满100减20</p>
+    </aside>
+</div>
+</body>
+</html>
