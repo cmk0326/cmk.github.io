@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>图书商城 - 实验2（含登录/注册退出按钮）</title>
+    <link rel="stylesheet" href="lab3-2504-122-index.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">鲁大图书馆</div>
+    <nav class="top-menu">
+        
+        <a href=" ">首页</a >
+        <a href="#">图书分类</a >
+        <a href="#">热门推荐</a >
+        <a href="#">关于我们</a >
+        <a id="openAuth">登录/注册</a >
+    </nav>
+</header>
+
+<div class="container">
+    <aside class="left-nav">
+        <h3>图书分类</h3>
+        <ul>
+            <li>计算机图书</li>
+            <li>文学小说</li>
+            <li>历史传记</li>
+            <li>少儿读物</li>
+            <li>考试教材</li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <h3>图书展示</h3>
+        <section class="book-show">
+            <div class="book-item">
+                <img src="img6.jpg" alt="图书封面">
+                <div class="book-desc">点击查看详情</div>
+            </div>
+            <div class="book-item">
+                <img src="img5.jpg" alt="图书封面">
+                <div class="book-desc">点击查看详情</div>
+            </div>
+            <div class="book-item">
+                <img src="img4.jpg" alt="图书封面">
+                <div class="book-desc">点击查看详情</div>
+            </div>
+        </section>
+
+        <h3>热门推荐</h3>
+        <section class="hot-book">
+            <div class="hot-item">Python入门</div>
+            <div class="hot-item">JavaScript实战</div>
+            <div class="hot-item">HTML/CSS权威指南</div>
+        </section>
+
+        <h3>新书上市</h3>
+        <section class="new-book">
+            <table border="1" cellpadding="8" cellspacing="0">
+                <tr><th>书名</th><th>价格</th><th>出版时间</th></tr>
+                <tr><td>深入Java</td><td>59元</td><td>2025-01</td></tr>
+                <tr><td>前端开发</td><td>49元</td><td>2025-02</td></tr>
+            </table>
+        </section>
+    </main>
+
+    <aside class="right-ad">
+        <h3>促销信息</h3>
+        <p>买一送二</p>
+        <p>满100减20</p >
+    </aside>
+</div>
+
+<!-- ===== 弹窗区域 ===== -->
+<div class="auth-modal" id="authModal">
+    <!-- 登录 -->
+    <div class="auth-form" id="loginBox">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2>用户登录</h2>
+        <form id="loginForm">
+            <input type="text" id="loginUser" placeholder="用户名" required>
+            <input type="password" id="loginPwd" placeholder="密码" required>
+            <div class="msg" id="loginMsg"></div>
+            <button type="submit">登录</button>
+            <div class="switch" onclick="toRegister()">没有账号？立即注册</div>
+        </form>
+    </div>
+
+    <!-- 注册 -->
+    <div class="auth-form" id="registerBox" style="display:none">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2>用户注册</h2>
+        <form id="registerForm">
+            <input type="text" id="regUser" placeholder="用户名" required>
+            <input type="email" id="regEmail" placeholder="邮箱" required>
+            <input type="password" id="regPwd" placeholder="密码" required>
+            <input type="password" id="regPwd2" placeholder="确认密码" required>
+            <div class="msg" id="regMsg"></div>
+            <button type="submit">注册</button>
+            <div class="switch" onclick="toLogin()">已有账号？立即登录</div>
+        </form>
+    </div>
+
+    <!-- 欢迎 -->
+    <div class="auth-form welcome" id="welcomeBox" style="display:none">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2>欢迎回来！</h2>
+        <p id="welcomeUser"></p >
+        <button onclick="logout()">退出登录</button>
+    </div>
+</div>
+
+<script>
+/* ========= 本地存储工具 ========= */
+const USERS_KEY = 'lab2_users';
+const CURR_KEY  = 'lab2_current';
+
+function getUsers(){return JSON.parse(localStorage.getItem(USERS_KEY)||'[]')}
+function saveUsers(arr){localStorage.setItem(USERS_KEY,JSON.stringify(arr))}
+function getCurr(){return JSON.parse(localStorage.getItem(CURR_KEY)||'null')}
+function setCurr(user){localStorage.setItem(CURR_KEY,JSON.stringify(user))}
+function clearCurr(){localStorage.removeItem(CURR_KEY)}
+
+/* ========= 弹窗控制 ========= */
+const modal   = document.getElementById('authModal');
+const loginB  = document.getElementById('loginBox');
+const regB    = document.getElementById('registerBox');
+const welB    = document.getElementById('welcomeBox');
+
+function showModal(box){
+    [loginB,regB,welB].forEach(b=>b.style.display='none');
+    box.style.display='block';
+    modal.style.display='flex';
+}
+function closeModal(){modal.style.display='none'}
+function toRegister(){showModal(regB)}
+function toLogin(){showModal(loginB)}
+
+/* ========= 头部按钮 ========= */
+document.getElementById('openAuth').onclick=function(){
+    const curr=getCurr();
+    if(curr){
+        document.getElementById('welcomeUser').textContent=`你好，${curr.username}`;
+        showModal(welB);
+    }else{
+        showModal(loginB);
+    }
+};
+
+/* ========= 登录 ========= */
+document.getElementById('loginForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    const user=document.getElementById('loginUser').value.trim();
+    const pwd=document.getElementById('loginPwd').value.trim();
+    const u=getUsers().find(item=>item.username===user && item.password===pwd);
+    const msg=document.getElementById('loginMsg');
+    if(u){
+        setCurr(u);
+        document.getElementById('welcomeUser').textContent=`你好，${u.username}`;
+        showModal(welB);
+        document.getElementById('openAuth').textContent=u.username;
+    }else{
+        msg.textContent='用户名或密码错误！';
+        msg.style.display='block';
+    }
+});
+
+/* ========= 注册 ========= */
+document.getElementById('registerForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    const user=document.getElementById('regUser').value.trim();
+    const email=document.getElementById('regEmail').value.trim();
+    const pwd=document.getElementById('regPwd').value.trim();
+    const pwd2=document.getElementById('regPwd2').value.trim();
+    const msg=document.getElementById('regMsg');
+    msg.style.color='red';
+    if(pwd!==pwd2){msg.textContent='两次密码不一致！';msg.style.display='block';return;}
+    let users=getUsers();
+    if(users.some(item=>item.username===user)){msg.textContent='用户名已存在！';msg.style.display='block';return;}
+    const newUser={username:user,email:email,password:pwd};
+    users.push(newUser);
+    saveUsers(users);
+    msg.style.color='green';
+    msg.textContent='注册成功，请登录';
+    msg.style.display='block';
+    document.getElementById('registerForm').reset();
+    setTimeout(()=>{toLogin();msg.style.color='red';},1500);
+});
+
+/* ========= 退出登录 ========= */
+function logout(){
+    clearCurr();
+    document.getElementById('openAuth').textContent='登录/注册';
+    closeModal();
+}
+
+/* ========= 页面加载检查 ========= */
+window.onload=function(){
+    const curr=getCurr();
+    if(curr) document.getElementById('openAuth').textContent=curr.username;
+};
+</script>
+</body>
+</html>
